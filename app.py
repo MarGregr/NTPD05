@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from sklearn.linear_model import LinearRegression
 import numpy as np
+import os
 
 #Inicjalizacja aplikacji z opisem
 app = FastAPI(
@@ -65,3 +66,9 @@ async def predict(data: dict):
         "input": {"x1": input_x1, "x2": input_x2},
         "prediction": round(float(prediction[0]), 2)
     }
+
+@app.get("/status")
+async def get_status():
+    #Nazwa klucza
+    db_name = os.getenv("APP_DB_NAME", "default_db")
+    return {"status": "running", "connected_to_db": db_name}
